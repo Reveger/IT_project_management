@@ -1,0 +1,19 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - run: pip install -r requirements.txt
+      - run: pip install jupyter jupytext
+      - run: jupytext --to py notebooks/*.ipynb
+      - run: pytest tests/ --maxfail=1 --disable-warnings
